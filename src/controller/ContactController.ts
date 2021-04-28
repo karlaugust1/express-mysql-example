@@ -1,4 +1,5 @@
 import { Request, Response } from "express";
+import { Http } from "../config";
 import { SaveContactsDto } from "../dto";
 import { ContactService } from "../service";
 
@@ -11,10 +12,10 @@ export class ContactController {
             const service = new ContactService()
             await service.save(dto.contacts, req.client)
 
-            res.send("Ok!");
+            res.send(Http.buildSuccess())
         } catch (e) {
             console.error(e.message)
-            res.status(400).send(e.message)
+            res.status(400).send(Http.buildError(e.stack))
         }
     }
 

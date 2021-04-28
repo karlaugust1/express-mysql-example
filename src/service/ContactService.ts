@@ -12,7 +12,7 @@ export class ContactService {
 
     async save(contacts: Contact[], client: Client) {
 
-        const processor = this.processors.get(client.city)
+        const processor = this.processors.get(client.name)
         if (!processor) {
             throw new Error("Nenhum processador foi encontrado para o cliente!");
         }
