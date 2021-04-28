@@ -1,0 +1,38 @@
+version: '3'
+
+services:
+  mysql:
+    image: mysql
+    restart: always
+    environment:
+    - MYSQL_ROOT_PASSWORD=qwe@5233
+    - MYSQL_DATABASE=macapa_clients
+    - MYSQL_USER=dev
+    - MYSQL_PASSWORD=devpassword
+    - MYSQL_ROOT_HOST=localhost
+    ports:
+      - "3306:3306"
+    command: --default-authentication-plugin=mysql_native_password
+
+  postgresql:
+    image: postgres
+    restart: always
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_PASSWORD: "devpassword"
+      POSTGRES_USER: "dev"
+  
+  api:
+    container_name: api-container
+    image: node:12
+    working_dir: /usr/src/mercafacil
+    restart: always
+    command: bash -c "npm install --only=prod && npm start"
+    volumes: 
+        - ./dist/:/usr/src/mercafacil/dist/
+    ports: 
+        - "3000:3000"
+    links: 
+        - mysql
+        - postgresql
