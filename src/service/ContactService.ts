@@ -1,18 +1,22 @@
-import { MySQL } from '../repository/test'
-
+import { Processor } from '../interfaces'
+import { Client, Contact } from '../model'
+import { ContactMySqlRepository } from '../repository'
+import { MacapaProcessor } from './processors'
 export class ContactService {
 
-    async save(contact: any){
-        const query = "select * from contacts"
-        MySQL.query(query, (err:Error, results:Object[])=>{
-            if(err){
-                console.log(err)
-            }
-            else {
-                console.log(results)
-            }
-        });
-        Promise.resolve()
-        console.log('YOLOO, btw', contact)
+    private processors = new  Map<string, Processor>()
+
+    constructor() {
+        this.processors.set('macapa', new MacapaProcessor())
+    }
+
+    async save(contacts: Contact[], client: Client) {
+
+        const processor = this.processors.get(client.city)
+        if (!processor) {
+            throw new Error("Nenhum processador foi encontrado para o cliente!");
+        }
+
+        await processor.save(contacts)
     }
 }

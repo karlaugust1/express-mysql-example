@@ -1,17 +1,20 @@
 import { Request, Response } from "express";
-import { ContactService } from "../service/ContactService";
+import { SaveContactsDto } from "../dto";
+import { ContactService } from "../service";
 
 export class ContactController {
 
     async save(req: Request, res: Response) {
         try {
-            const service = new ContactService()
-            await service.save(req.body)
-            res.send("Hi! I'm your getter, be free to do anything");
+            const dto = req.body as SaveContactsDto
 
+            const service = new ContactService()
+            await service.save(dto.contacts, req.client)
+
+            res.send("Ok!");
         } catch (e) {
             console.error(e.message)
-            res.status(400).send("Ocorreu um erro inesperado, ao processar a requisição!")
+            res.status(400).send(e.message)
         }
     }
 

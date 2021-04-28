@@ -9,11 +9,13 @@
         "emitDecoratorMetadata": true,
         "esModuleInterop": true,
         "allowSyntheticDefaultImports": true,
+        "typeRoots": [ "@types" ]
+
     },
     "include": [
         "src/**/*.ts"
     ],
     "exclude": [
         "node_modules"
-    ]
+    ],
 }
